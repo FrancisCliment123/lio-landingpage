@@ -1,4 +1,4 @@
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { Download, Sparkles, Smartphone, CheckCircle, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -217,9 +217,53 @@ const WidgetEcosystem = () => {
     );
 };
 
+// --- Custom Cosmic Cursor ---
+const CosmicCursor = () => {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    // Smooth spring physics for the cursor trail
+    const springX = useSpring(mouseX, { stiffness: 300, damping: 28, mass: 0.5 });
+    const springY = useSpring(mouseY, { stiffness: 300, damping: 28, mass: 0.5 });
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, [mouseX, mouseY]);
+
+    // Create a dynamic radial gradient exactly at the cursor position
+    const bgBackground = useMotionTemplate`radial-gradient(400px circle at ${springX}px ${springY}px, rgba(175, 37, 244, 0.08), transparent 80%)`;
+
+    return (
+        <>
+            {/* The physical dot on the exact cursor (optional, maybe keep it clean without a dot, but here's the glow) */}
+            <motion.div
+                className="pointer-events-none fixed inset-0 z-0 h-screen w-screen"
+                style={{ background: bgBackground }}
+            />
+            {/* Soft glowing trail dot */}
+            <motion.div
+                className="pointer-events-none fixed top-0 left-0 z-50 h-6 w-6 rounded-full bg-purple-400/30 blur-[4px] mix-blend-screen"
+                style={{
+                    x: springX,
+                    y: springY,
+                    translateX: "-50%",
+                    translateY: "-50%",
+                }}
+            />
+        </>
+    );
+};
+
 export default function Home() {
     return (
         <div className="bg-[#0A0A14] min-h-screen text-[#F5F3EE] font-sans selection:bg-purple-500/30">
+            <CosmicCursor />
             <CosmicBackground />
             <Navbar />
 
