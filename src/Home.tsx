@@ -374,6 +374,7 @@ export default function Home() {
 
                     <div className="flex gap-10 text-sm font-medium text-[#8A8A93]">
                         {/* Link tags are fine, ensuring they point correctly to privacy and terms */}
+                        <Link to="/support" className="hover:text-white transition-colors">Soporte</Link>
                         <Link to="/privacy" className="hover:text-white transition-colors">Privacidad</Link>
                         <Link to="/terms" className="hover:text-white transition-colors">Términos</Link>
                     </div>
