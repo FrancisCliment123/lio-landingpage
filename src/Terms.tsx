@@ -1,6 +1,18 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// Pre-calculate random values for stars to avoid impure renders
+const stars = [...Array(40)].map(() => ({
+    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+    y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+    opacity: Math.random() * 0.5 + 0.1,
+    scale: Math.random() * 0.4 + 0.2,
+    duration: Math.random() * 4 + 3,
+    delay: Math.random() * 5,
+    width: Math.random() * 2 + 1,
+    height: Math.random() * 2 + 1
+}));
+
 export default function Terms() {
     return (
         <div className="min-h-screen bg-[#050511] text-white font-sans overflow-hidden relative selection:bg-accent/30">
@@ -18,27 +30,27 @@ export default function Terms() {
                 <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E")` }}></div>
 
                 {/* Animated Stars */}
-                {[...Array(40)].map((_, i) => (
+                {stars.map((star, i) => (
                     <motion.div
                         key={i}
                         className="absolute bg-white rounded-full shadow-[0_0_2px_#fff]"
                         initial={{
-                            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
-                            opacity: Math.random() * 0.5 + 0.1,
-                            scale: Math.random() * 0.4 + 0.2,
+                            x: star.x,
+                            y: star.y,
+                            opacity: star.opacity,
+                            scale: star.scale,
                         }}
                         animate={{
                             opacity: [0.2, 0.8, 0.2],
                             scale: [0.5, 1, 0.5],
                         }}
                         transition={{
-                            duration: Math.random() * 4 + 3,
+                            duration: star.duration,
                             repeat: Infinity,
                             ease: "easeInOut",
-                            delay: Math.random() * 5,
+                            delay: star.delay,
                         }}
-                        style={{ width: Math.random() * 2 + 1, height: Math.random() * 2 + 1 }}
+                        style={{ width: star.width, height: star.height }}
                     />
                 ))}
             </div>

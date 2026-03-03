@@ -1,9 +1,20 @@
-import { motion, useScroll, useMotionValueEvent, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
-import { Download, Sparkles, Smartphone, CheckCircle, Activity } from 'lucide-react';
+import { motion, useScroll, useMotionValueEvent, useMotionValue, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
+import { Download, Sparkles, Smartphone, CheckCircle, Activity, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-// --- Background Component ---
+// Pre-calculate random values for stars to avoid impure renders
+const stars = [...Array(40)].map(() => ({
+    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+    y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+    opacity: Math.random() * 0.3 + 0.1,
+    scale: Math.random() * 0.3 + 0.2,
+    duration: Math.random() * 5 + 4,
+    delay: Math.random() * 5,
+    width: Math.random() * 2 + 1,
+    height: Math.random() * 2 + 1
+}));
+
 const CosmicBackground = () => (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#0A0A14]">
         {/* CSS Noise Overlay */}
@@ -17,27 +28,27 @@ const CosmicBackground = () => (
         <div className="absolute bottom-[0%] right-[-10%] w-[40vw] h-[40vw] bg-indigo-900/10 rounded-full blur-[100px] mix-blend-screen flex-none" />
 
         {/* Animated Stars */}
-        {[...Array(40)].map((_, i) => (
+        {stars.map((star, i) => (
             <motion.div
                 key={i}
                 className="absolute bg-white rounded-full shadow-[0_0_4px_#fff]"
                 initial={{
-                    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                    y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
-                    opacity: Math.random() * 0.3 + 0.1,
-                    scale: Math.random() * 0.3 + 0.2,
+                    x: star.x,
+                    y: star.y,
+                    opacity: star.opacity,
+                    scale: star.scale,
                 }}
                 animate={{
                     opacity: [0.1, 0.5, 0.1],
                     scale: [0.5, 1, 0.5],
                 }}
                 transition={{
-                    duration: Math.random() * 5 + 4,
+                    duration: star.duration,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: Math.random() * 5,
+                    delay: star.delay,
                 }}
-                style={{ width: Math.random() * 2 + 1, height: Math.random() * 2 + 1 }}
+                style={{ width: star.width, height: star.height }}
             />
         ))}
     </div>
@@ -66,14 +77,99 @@ const Navbar = () => {
                 <a href="#premium" className="hover:text-white transition-colors">Premium</a>
             </div>
 
-            <motion.button
+            <motion.a
+                href="https://apps.apple.com/us/app/lio/id6758862292"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className="bg-[#F5F3EE] text-[#0A0A14] px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg hover:bg-white transition-colors flex items-center gap-2"
             >
                 Descargar App
-            </motion.button>
+            </motion.a>
         </motion.nav>
+    );
+};
+
+const AnimatedHeroText = () => {
+    const phrases = [
+        "Respira profundo. Estás a salvo.",
+        "La calma no es un destino. Es cómo decides viajar.",
+        "Tu paz mental es innegociable.",
+        "Nadie escucha al árbol crecer, pero todos lo escuchan caer."
+    ];
+
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % phrases.length);
+        }, 5000); // Cambia cada 5 segundos
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <AnimatePresence mode="wait">
+            <motion.p
+                key={index}
+                initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="text-2xl text-[#F5F3EE] leading-snug drop-shadow-md absolute w-full"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+                "{phrases[index]}"
+            </motion.p>
+        </AnimatePresence>
+    );
+};
+
+// --- Custom Tilt Card Wrapper ---
+const TiltCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+    const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+
+    const rotateX = useMotionTemplate`calc(${mouseYSpring} * 15deg)`;
+    const rotateY = useMotionTemplate`calc(${mouseXSpring} * -15deg)`;
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+
+        // Calculate mouse position relative to card center (-0.5 to 0.5)
+        const mouseX = (e.clientX - rect.left) / rect.width - 0.5;
+        const mouseY = (e.clientY - rect.top) / rect.height - 0.5;
+
+        x.set(mouseX);
+        y.set(mouseY);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
+
+    return (
+        <motion.div
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX,
+                rotateY,
+                transformStyle: "preserve-3d",
+            }}
+            className={`perspective-1000 w-full h-full ${className}`}
+        >
+            <div
+                style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}
+                className="w-full h-full"
+            >
+                {children}
+            </div>
+        </motion.div>
     );
 };
 
@@ -131,89 +227,93 @@ const ConsistencyTracker = () => {
     const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
     return (
-        <motion.div className="glass-card p-8 flex flex-col justify-between h-full group hover:border-white/20 transition-colors duration-500 min-h-[350px]">
-            <div className="mb-8 relative z-10">
-                <div className="w-12 h-12 rounded-[1.2rem] bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner text-amber-300">
-                    <Activity size={22} />
+        <TiltCard>
+            <motion.div className="glass-card p-8 flex flex-col justify-between h-full group hover:border-white/20 transition-colors duration-500 min-h-[350px]">
+                <div className="mb-8 relative z-10" style={{ transform: "translateZ(40px)" }}>
+                    <div className="w-12 h-12 rounded-[1.2rem] bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner text-amber-300">
+                        <Activity size={22} />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">Rastreador de Consistencia</h3>
+                    <p className="text-[#8A8A93] leading-relaxed text-sm">
+                        Visualiza tu consistencia diaria. Cada día es una nueva oportunidad para cultivar tu paz interior.
+                    </p>
                 </div>
-                <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">Rastreador de Consistencia</h3>
-                <p className="text-[#8A8A93] leading-relaxed text-sm">
-                    Visualiza tu consistencia diaria. Cada día es una nueva oportunidad para cultivar tu paz interior.
-                </p>
-            </div>
 
-            <div className="flex justify-between items-center bg-[#05050A]/40 rounded-2xl p-5 border border-white/5 mt-auto">
-                {days.map((day, i) => {
-                    const isActive = i <= 3;
-                    const isToday = i === 3;
-                    return (
-                        <div key={i} className="flex flex-col items-center gap-3">
-                            <span className="text-xs font-medium tracking-wider text-[#8A8A93]">{day}</span>
-                            <motion.div
-                                initial={{ scale: 0, opacity: 0 }}
-                                whileInView={{ scale: 1, opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.15, type: "spring", stiffness: 200, damping: 15 }}
-                                className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 
+                <div className="flex justify-between items-center bg-[#05050A]/40 rounded-2xl p-5 border border-white/5 mt-auto">
+                    {days.map((day, i) => {
+                        const isActive = i <= 3;
+                        const isToday = i === 3;
+                        return (
+                            <div key={i} className="flex flex-col items-center gap-3">
+                                <span className="text-xs font-medium tracking-wider text-[#8A8A93]">{day}</span>
+                                <motion.div
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    whileInView={{ scale: 1, opacity: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.15, type: "spring", stiffness: 200, damping: 15 }}
+                                    className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 
                                     ${isActive
-                                        ? isToday
-                                            ? 'bg-amber-100 shadow-[0_0_20px_rgba(253,230,138,0.4)] border-none'
-                                            : 'bg-white/10 border border-white/20'
-                                        : 'border border-white/5 bg-transparent'}`}
-                            >
-                                {isActive && !isToday && <CheckCircle size={14} className="text-white/60" />}
-                                {isToday && <div className="w-2.5 h-2.5 rounded-full bg-amber-600" />}
-                            </motion.div>
-                        </div>
-                    );
-                })}
-            </div>
-        </motion.div>
+                                            ? isToday
+                                                ? 'bg-amber-100 shadow-[0_0_20px_rgba(253,230,138,0.4)] border-none'
+                                                : 'bg-white/10 border border-white/20'
+                                            : 'border border-white/5 bg-transparent'}`}
+                                >
+                                    {isActive && !isToday && <CheckCircle size={14} className="text-white/60" />}
+                                    {isToday && <div className="w-2.5 h-2.5 rounded-full bg-amber-600" />}
+                                </motion.div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </motion.div>
+        </TiltCard>
     );
 };
 
 const WidgetEcosystem = () => {
     return (
-        <motion.div className="glass-card p-8 flex flex-col md:flex-row items-center gap-10 md:justify-between h-full relative overflow-hidden group">
-            <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] transition-all duration-700 group-hover:bg-blue-500/20" />
+        <TiltCard>
+            <motion.div className="glass-card p-8 flex flex-col md:flex-row items-center gap-10 md:justify-between h-full relative overflow-hidden group">
+                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] transition-all duration-700 group-hover:bg-blue-500/20" />
 
-            <div className="mb-0 relative z-10 max-w-sm">
-                <div className="w-12 h-12 rounded-[1.2rem] bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner text-blue-300">
-                    <Smartphone size={22} />
-                </div>
-                <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">Ecosistema de Widgets</h3>
-                <p className="text-[#8A8A93] leading-relaxed text-sm">
-                    Paz en tu pantalla de inicio. Widgets elegantes que te recuerdan respirar cada vez que desbloqueas tu dispositivo.
-                </p>
-            </div>
-
-            <div className="relative h-48 w-full md:w-64 flex items-center justify-center pointer-events-none mt-8 md:mt-0">
-                {/* Large floating widget */}
-                <motion.div
-                    animate={{ y: [-8, 8, -8], rotate: [-1, 1, -1] }}
-                    transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                    className="absolute z-20 w-48 h-48 glass rounded-3xl p-5 flex flex-col justify-between shadow-2xl border border-white/20"
-                >
-                    <div className="flex justify-between items-start">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400/20 to-indigo-400/20 border border-white/10" />
-                        <span className="text-[10px] text-[#8A8A93] uppercase font-semibold">Lio App</span>
+                <div className="mb-0 relative z-10 max-w-sm" style={{ transform: "translateZ(40px)" }}>
+                    <div className="w-12 h-12 rounded-[1.2rem] bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner text-blue-300">
+                        <Smartphone size={22} />
                     </div>
-                    <p className="text-lg text-[#F5F3EE] leading-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                        "Respira profundo. Estás a salvo."
+                    <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">Ecosistema de Widgets</h3>
+                    <p className="text-[#8A8A93] leading-relaxed text-sm">
+                        Paz en tu pantalla de inicio. Widgets elegantes que te recuerdan respirar cada vez que desbloqueas tu dispositivo.
                     </p>
-                </motion.div>
+                </div>
 
-                {/* Small background widget */}
-                <motion.div
-                    animate={{ y: [5, -5, 5], x: [0, -5, 0] }}
-                    transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-                    className="absolute z-10 -right-4 top-0 w-28 h-28 bg-[#0a0a14]/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-col justify-between blur-[1px]"
-                >
-                    <div className="w-full flex-1 rounded-lg bg-gradient-to-t from-white/10 to-transparent" />
-                    <div className="w-2/3 h-2 bg-white/20 rounded-full mt-3" />
-                </motion.div>
-            </div>
-        </motion.div>
+                <div className="relative h-48 w-full md:w-64 flex items-center justify-center pointer-events-none mt-8 md:mt-0" style={{ transform: "translateZ(80px)" }}>
+                    {/* Large floating widget */}
+                    <motion.div
+                        animate={{ y: [-8, 8, -8], rotate: [-1, 1, -1] }}
+                        transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                        className="absolute z-20 w-48 h-48 glass rounded-3xl p-5 flex flex-col justify-between shadow-2xl border border-white/20"
+                    >
+                        <div className="flex justify-between items-start">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400/20 to-indigo-400/20 border border-white/10" />
+                            <span className="text-[10px] text-[#8A8A93] uppercase font-semibold">Lio App</span>
+                        </div>
+                        <p className="text-lg text-[#F5F3EE] leading-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                            "Respira profundo. Estás a salvo."
+                        </p>
+                    </motion.div>
+
+                    {/* Small background widget */}
+                    <motion.div
+                        animate={{ y: [5, -5, 5], x: [0, -5, 0] }}
+                        transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+                        className="absolute z-10 -right-4 top-0 w-28 h-28 bg-[#0a0a14]/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-col justify-between blur-[1px]"
+                    >
+                        <div className="w-full flex-1 rounded-lg bg-gradient-to-t from-white/10 to-transparent" />
+                        <div className="w-2/3 h-2 bg-white/20 rounded-full mt-3" />
+                    </motion.div>
+                </div>
+            </motion.div>
+        </TiltCard>
     );
 };
 
@@ -260,6 +360,73 @@ const CosmicCursor = () => {
     );
 };
 
+// --- Testimonials Section ---
+const Testimonials = () => {
+    const reviews = [
+        { text: "Por fin una app que no me dice las mismas tres frases genéricas. El modo 'overthinking' es increíble.", author: "Beta Tester", rating: 5 },
+        { text: "Lio cambió completamente mi rutina matutina. Es el primer momento de paz real que tengo al despertar.", author: "María G.", rating: 5 },
+        { text: "El diseño es sublime. Un oasis virtual del que no quieres salir. La recomiendo 100%.", author: "Carlos R.", rating: 5 }
+    ];
+
+    return (
+        <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5">
+            <div className="text-center mb-16 space-y-4">
+                <h2 className="text-4xl font-medium tracking-tight text-[#F5F3EE]">Lo que dicen nuestros primeros usuarios.</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {reviews.map((review, i) => (
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ delay: i * 0.15, duration: 0.8, ease: "easeOut" }}
+                        key={i}
+                        className="glass-card p-8 flex flex-col justify-between"
+                    >
+                        <div className="flex gap-1 mb-6">
+                            {[...Array(review.rating)].map((_, j) => (
+                                <Star key={j} size={16} className="text-amber-400 fill-amber-400" />
+                            ))}
+                        </div>
+                        <p className="text-[#8A8A93] text-lg leading-relaxed mb-8 italic">"{review.text}"</p>
+                        <span className="text-sm font-semibold text-[#F5F3EE] uppercase tracking-wider">{review.author}</span>
+                    </motion.div>
+                ))}
+            </div>
+        </section>
+    );
+};
+
+// --- Final CTA Section ---
+const FinalCTA = () => (
+    <section className="relative z-10 py-32 px-6">
+        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="max-w-4xl mx-auto glass-card p-16 flex flex-col items-center text-center relative overflow-hidden group"
+        >
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[150%] bg-indigo-500/10 blur-[100px] transition-all duration-700 group-hover:bg-purple-500/20" />
+            <h2 className="text-4xl md:text-6xl font-medium tracking-tight text-[#F5F3EE] mb-6 relative z-10">Tu espacio seguro te espera.</h2>
+            <p className="text-[#8A8A93] text-lg max-w-lg mb-10 relative z-10">Únete a miles de personas que ya están cultivando una mente más serena y enfocada.</p>
+            <motion.a
+                href="https://apps.apple.com/us/app/lio/id6758862292"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative z-10 flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all"
+            >
+                <Download size={20} />
+                Descargar Lio Gratis
+            </motion.a>
+            <p className="mt-4 text-xs text-white/50 italic relative z-10">Incluye 3 días de Premium gratis. Sin compromisos.</p>
+        </motion.div>
+    </section>
+);
+
 export default function Home() {
     return (
         <div className="bg-[#0A0A14] min-h-screen text-[#F5F3EE] font-sans selection:bg-purple-500/30">
@@ -285,9 +452,14 @@ export default function Home() {
                         Potenciado por IA
                     </motion.div>
 
-                    <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight font-medium leading-[1.1] text-[#F5F3EE] mb-6">
+                    <motion.h1
+                        initial={{ opacity: 0, filter: 'blur(10px)', y: 20 }}
+                        animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                        transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
+                        className="text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight font-medium leading-[1.1] text-[#F5F3EE] mb-6"
+                    >
                         Tu paz mental <br className="hidden md:block" /> diaria.
-                    </h1>
+                    </motion.h1>
 
                     <h2 className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-200 to-indigo-300 italic font-light mb-8" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                         Un oasis privado.
@@ -297,14 +469,20 @@ export default function Home() {
                         Transforma tu vida interior con afirmaciones diseñadas a medida, rutinas de consistencia y una estética serena en tu pantalla.
                     </p>
 
-                    <motion.button
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                        className="flex items-center gap-3 bg-gradient-to-b from-white to-gray-200 text-black px-8 py-4 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all"
-                    >
-                        <Download size={20} />
-                        Descargar Lio Gratis
-                    </motion.button>
+                    <div className="flex flex-col items-center lg:items-start">
+                        <motion.a
+                            href="https://apps.apple.com/us/app/lio/id6758862292"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="flex items-center gap-3 bg-gradient-to-b from-white to-gray-200 text-black px-8 py-4 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all"
+                        >
+                            <Download size={20} />
+                            Descargar Lio Gratis
+                        </motion.a>
+                        <p className="mt-4 text-xs text-[#8A8A93] italic drop-shadow-md">Empieza con 3 días de Premium gratis.</p>
+                    </div>
                 </motion.div>
 
                 {/* Hero Feature Visual - iPhone Mockup */}
@@ -326,13 +504,11 @@ export default function Home() {
                                 transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
                                 className="w-20 h-20 rounded-3xl glass flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] p-4"
                             >
-                                <img src="/lio-logoalone.png" className="w-full h-full object-contain" />
+                                <img src="/lio-logoalone.png" alt="Lio Logo - Daily Affirmations App" className="w-full h-full object-contain" />
                             </motion.div>
 
-                            <div className="w-full max-w-[85%] text-center space-y-2">
-                                <p className="text-2xl text-[#F5F3EE] leading-snug drop-shadow-md" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                                    "La calma no es un destino. Es cómo decides viajar."
-                                </p>
+                            <div className="w-full max-w-[85%] text-center space-y-2 h-[100px] flex items-center justify-center relative">
+                                <AnimatedHeroText />
                             </div>
                         </div>
 
@@ -361,6 +537,9 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            <Testimonials />
+            <FinalCTA />
 
             {/* --- Footer --- */}
             <footer className="relative z-10 pt-20 pb-10 px-6 bg-[#05050A]">
