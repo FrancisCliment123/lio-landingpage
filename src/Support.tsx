@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Pre-calculate random values for stars to avoid impure renders
 const stars = [...Array(30)].map(() => ({
@@ -14,6 +15,7 @@ const stars = [...Array(30)].map(() => ({
 }));
 
 export default function Support() {
+    const { t } = useTranslation();
     return (
         <div className="min-h-screen bg-[#050511] text-white font-sans overflow-hidden relative selection:bg-accent/30">
 
@@ -62,7 +64,7 @@ export default function Support() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-4xl md:text-6xl font-bold mb-6 text-white tracking-tight"
                 >
-                    Centro de Soporte
+                    {t('support.title')}
                 </motion.h1>
 
                 <motion.p
@@ -71,7 +73,7 @@ export default function Support() {
                     transition={{ delay: 0.2 }}
                     className="text-xl text-gray-400 mb-12 leading-relaxed"
                 >
-                    Estamos aquí para ayudarte. Si tienes alguna pregunta, problema técnico o sugerencia sobre Lio, no dudes en contactarnos.
+                    {t('support.description')}
                 </motion.p>
 
                 <div className="grid gap-6 md:grid-cols-2">
@@ -79,8 +81,8 @@ export default function Support() {
                         whileHover={{ scale: 1.02 }}
                         className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"
                     >
-                        <h2 className="text-2xl font-bold mb-4 text-purple-300">Contacto Directo</h2>
-                        <p className="text-gray-300 mb-4">Envíanos un correo directamente y te responderemos lo antes posible.</p>
+                        <h2 className="text-2xl font-bold mb-4 text-purple-300">{t('support.directContact.title')}</h2>
+                        <p className="text-gray-300 mb-4">{t('support.directContact.description')}</p>
                         <a
                             href="mailto:franciscoclimentb@gmail.com"
                             className="text-white font-bold text-lg hover:text-purple-400 transition-colors"
@@ -93,14 +95,14 @@ export default function Support() {
                         whileHover={{ scale: 1.02 }}
                         className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"
                     >
-                        <h2 className="text-2xl font-bold mb-4 text-purple-300">Preguntas Frecuentes</h2>
-                        <p className="text-gray-300">Estamos trabajando en una guía de preguntas frecuentes.</p>
+                        <h2 className="text-2xl font-bold mb-4 text-purple-300">{t('support.faq.title')}</h2>
+                        <p className="text-gray-300">{t('support.faq.description')}</p>
                     </motion.div>
                 </div>
 
                 <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-white/5">
                     <p className="text-gray-400 italic">
-                        "Tu bienestar es nuestra prioridad. Gracias por formar parte de la comunidad de Lio."
+                        "{t('support.quote')}"
                     </p>
                 </div>
             </main>

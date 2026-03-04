@@ -2,6 +2,7 @@ import { motion, useScroll, useMotionValueEvent, useMotionValue, useSpring, useM
 import { Download, Sparkles, Smartphone, CheckCircle, Activity, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Pre-calculate random values for stars to avoid impure renders
 const stars = [...Array(40)].map(() => ({
@@ -58,10 +59,16 @@ const CosmicBackground = () => (
 const Navbar = () => {
     const { scrollY } = useScroll();
     const [scrolled, setScrolled] = useState(false);
+    const { t, i18n } = useTranslation();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         setScrolled(latest > 50);
     });
+
+    const toggleLanguage = () => {
+        const newLang = i18n.language === 'es' ? 'en' : 'es';
+        i18n.changeLanguage(newLang);
+    };
 
     return (
         <motion.nav
@@ -73,30 +80,39 @@ const Navbar = () => {
             </div>
 
             <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#8A8A93]">
-                <a href="#features" className="hover:text-white transition-colors">Características</a>
-                <a href="#premium" className="hover:text-white transition-colors">Premium</a>
+                <a href="#features" className="hover:text-white transition-colors">{t('navbar.features')}</a>
+                <a href="#premium" className="hover:text-white transition-colors">{t('navbar.premium')}</a>
             </div>
 
-            <motion.a
-                href="https://apps.apple.com/us/app/lio/id6758862292"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="bg-[#F5F3EE] text-[#0A0A14] px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg hover:bg-white transition-colors flex items-center gap-2"
-            >
-                Descargar App
-            </motion.a>
+            <div className="flex items-center gap-4">
+                <button
+                    onClick={toggleLanguage}
+                    className="text-sm font-semibold text-[#8A8A93] hover:text-[#F5F3EE] transition-colors uppercase tracking-wider bg-white/5 px-2 py-1 rounded-md border border-white/10"
+                >
+                    {i18n.language === 'es' ? 'EN' : 'ES'}
+                </button>
+                <motion.a
+                    href="https://apps.apple.com/us/app/lio/id6758862292"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="bg-[#F5F3EE] text-[#0A0A14] px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg hover:bg-white transition-colors flex items-center gap-2"
+                >
+                    {t('navbar.download')}
+                </motion.a>
+            </div>
         </motion.nav>
     );
 };
 
 const AnimatedHeroText = () => {
+    const { t } = useTranslation();
     const phrases = [
-        "Respira profundo. Estás a salvo.",
-        "La calma no es un destino. Es cómo decides viajar.",
-        "Tu paz mental es innegociable.",
-        "Nadie escucha al árbol crecer, pero todos lo escuchan caer."
+        t('heroPhrases.0'),
+        t('heroPhrases.1'),
+        t('heroPhrases.2'),
+        t('heroPhrases.3')
     ];
 
     const [index, setIndex] = useState(0);
@@ -175,7 +191,8 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode, cla
 
 // --- Features Interactive Cards ---
 const AffirmationEngine = () => {
-    const fullText = "Merezco la paz que estoy buscando y la felicidad que me propongo cultivar.";
+    const { t } = useTranslation();
+    const fullText = t('engineText');
     const [displayedText, setDisplayedText] = useState("");
     const [hasTyped, setHasTyped] = useState(false);
 
@@ -203,9 +220,9 @@ const AffirmationEngine = () => {
                 <div className="w-12 h-12 rounded-[1.2rem] bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner">
                     <Sparkles className="text-purple-300" size={22} />
                 </div>
-                <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">El Motor de Afirmaciones</h3>
+                <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">{t('home.engineTitle')}</h3>
                 <p className="text-[#8A8A93] leading-relaxed max-w-xs text-sm">
-                    IA que entiende tu estado de ánimo. Generación de afirmaciones hiper-personalizadas al instante.
+                    {t('home.engineDescription')}
                 </p>
             </div>
 
@@ -224,7 +241,8 @@ const AffirmationEngine = () => {
 };
 
 const ConsistencyTracker = () => {
-    const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+    const { t } = useTranslation();
+    const days = [t('home.days.M'), t('home.days.T'), t('home.days.W'), t('home.days.Th'), t('home.days.F'), t('home.days.S'), t('home.days.Su')];
 
     return (
         <TiltCard>
@@ -233,9 +251,9 @@ const ConsistencyTracker = () => {
                     <div className="w-12 h-12 rounded-[1.2rem] bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner text-amber-300">
                         <Activity size={22} />
                     </div>
-                    <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">Rastreador de Consistencia</h3>
+                    <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">{t('home.trackerTitle')}</h3>
                     <p className="text-[#8A8A93] leading-relaxed text-sm">
-                        Visualiza tu consistencia diaria. Cada día es una nueva oportunidad para cultivar tu paz interior.
+                        {t('home.trackerDescription')}
                     </p>
                 </div>
 
@@ -271,6 +289,7 @@ const ConsistencyTracker = () => {
 };
 
 const WidgetEcosystem = () => {
+    const { t } = useTranslation();
     return (
         <TiltCard>
             <motion.div className="glass-card p-8 flex flex-col md:flex-row items-center gap-10 md:justify-between h-full relative overflow-hidden group">
@@ -280,9 +299,9 @@ const WidgetEcosystem = () => {
                     <div className="w-12 h-12 rounded-[1.2rem] bg-white/5 border border-white/10 flex items-center justify-center mb-6 shadow-inner text-blue-300">
                         <Smartphone size={22} />
                     </div>
-                    <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">Ecosistema de Widgets</h3>
+                    <h3 className="text-2xl font-semibold text-[#F5F3EE] mb-3">{t('home.widgetsTitle')}</h3>
                     <p className="text-[#8A8A93] leading-relaxed text-sm">
-                        Paz en tu pantalla de inicio. Widgets elegantes que te recuerdan respirar cada vez que desbloqueas tu dispositivo.
+                        {t('home.widgetsDescription')}
                     </p>
                 </div>
 
@@ -295,10 +314,10 @@ const WidgetEcosystem = () => {
                     >
                         <div className="flex justify-between items-start">
                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400/20 to-indigo-400/20 border border-white/10" />
-                            <span className="text-[10px] text-[#8A8A93] uppercase font-semibold">Lio App</span>
+                            <span className="text-[10px] text-[#8A8A93] uppercase font-semibold">{t('home.widgetAppName')}</span>
                         </div>
                         <p className="text-lg text-[#F5F3EE] leading-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                            "Respira profundo. Estás a salvo."
+                            {t('home.widgetQuote')}
                         </p>
                     </motion.div>
 
@@ -362,16 +381,17 @@ const CosmicCursor = () => {
 
 // --- Testimonials Section ---
 const Testimonials = () => {
+    const { t } = useTranslation();
     const reviews = [
-        { text: "Por fin una app que no me dice las mismas tres frases genéricas. El modo 'overthinking' es increíble.", author: "Beta Tester", rating: 5 },
-        { text: "Lio cambió completamente mi rutina matutina. Es el primer momento de paz real que tengo al despertar.", author: "María G.", rating: 5 },
-        { text: "El diseño es sublime. Un oasis virtual del que no quieres salir. La recomiendo 100%.", author: "Carlos R.", rating: 5 }
+        { text: t('reviews.0.text'), author: t('reviews.0.author'), rating: 5 },
+        { text: t('reviews.1.text'), author: t('reviews.1.author'), rating: 5 },
+        { text: t('reviews.2.text'), author: t('reviews.2.author'), rating: 5 }
     ];
 
     return (
         <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5">
             <div className="text-center mb-16 space-y-4">
-                <h2 className="text-4xl font-medium tracking-tight text-[#F5F3EE]">Lo que dicen nuestros primeros usuarios.</h2>
+                <h2 className="text-4xl font-medium tracking-tight text-[#F5F3EE]">{t('home.testimonialsTitle')}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {reviews.map((review, i) => (
@@ -397,37 +417,131 @@ const Testimonials = () => {
     );
 };
 
-// --- Final CTA Section ---
-const FinalCTA = () => (
-    <section className="relative z-10 py-32 px-6">
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
-        <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-4xl mx-auto glass-card p-16 flex flex-col items-center text-center relative overflow-hidden group"
-        >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[150%] bg-indigo-500/10 blur-[100px] transition-all duration-700 group-hover:bg-purple-500/20" />
-            <h2 className="text-4xl md:text-6xl font-medium tracking-tight text-[#F5F3EE] mb-6 relative z-10">Tu espacio seguro te espera.</h2>
-            <p className="text-[#8A8A93] text-lg max-w-lg mb-10 relative z-10">Únete a miles de personas que ya están cultivando una mente más serena y enfocada.</p>
-            <motion.a
-                href="https://apps.apple.com/us/app/lio/id6758862292"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative z-10 flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all"
+// --- Premium Section ---
+const PremiumSection = () => {
+    const { t } = useTranslation();
+    const features = [
+        { title: t('premium.feature1Title'), desc: t('premium.feature1Desc') },
+        { title: t('premium.feature2Title'), desc: t('premium.feature2Desc') },
+        { title: t('premium.feature3Title'), desc: t('premium.feature3Desc') }
+    ];
+
+    return (
+        <section id="premium" className="relative z-10 py-32 px-6 max-w-6xl mx-auto border-t border-white/5">
+            <div className="absolute inset-0 bg-gradient-to-b from-purple-900/5 to-transparent blur-3xl -z-10 rounded-[4rem]" />
+            <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="glass-card p-10 md:p-16 rounded-[3rem] border border-white/10 relative overflow-hidden group"
             >
-                <Download size={20} />
-                Descargar Lio Gratis
-            </motion.a>
-            <p className="mt-4 text-xs text-white/50 italic relative z-10">Incluye 3 días de Premium gratis. Sin compromisos.</p>
-        </motion.div>
-    </section>
-);
+                {/* Premium Glow effect */}
+                <div className="absolute top-0 right-0 w-[80%] h-[80%] bg-gradient-to-bl from-amber-500/10 via-purple-500/5 to-transparent blur-[80px] pointer-events-none transition-all duration-700 group-hover:from-amber-500/15 group-hover:via-purple-500/10" />
+
+                <div className="relative z-10 flex flex-col md:flex-row gap-16 items-center">
+                    <div className="flex-1 space-y-6">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 text-xs font-semibold tracking-wide text-amber-200 uppercase shadow-[inset_0_1px_rgba(255,255,255,0.1)]">
+                            <Sparkles size={14} className="text-amber-400" />
+                            {t('premium.subtitle')}
+                        </div>
+                        <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-[#F5F3EE]">
+                            {t('premium.title')}
+                        </h2>
+                        <p className="text-[#8A8A93] text-lg leading-relaxed max-w-md">
+                            {t('premium.description')}
+                        </p>
+
+                        <div className="pt-6 space-y-5">
+                            {features.map((feature, i) => (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.2 + (i * 0.1), duration: 0.5 }}
+                                    key={i}
+                                    className="flex gap-4 group/item"
+                                >
+                                    <div className="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center transition-colors group-hover/item:border-amber-400/40 group-hover/item:bg-amber-400/20">
+                                        <CheckCircle size={14} className="text-amber-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[#F5F3EE] font-medium text-base mb-1">{feature.title}</h4>
+                                        <p className="text-[#8A8A93] text-sm leading-relaxed max-w-xs">{feature.desc}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex-1 w-full md:w-auto flex flex-col items-center max-w-sm mx-auto p-10 rounded-[2.5rem] bg-[#0A0A14]/80 border border-white/10 shadow-2xl backdrop-blur-md relative">
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-[2.5rem] pointer-events-none" />
+
+                        <div className="text-center space-y-4 mb-10 relative z-10">
+                            <h3 className="text-2xl font-semibold text-[#F5F3EE]">Lio Premium</h3>
+                            <div className="flex justify-center items-end gap-1">
+                                <span className="text-5xl font-medium text-white tracking-tight">$29.99</span>
+                                <span className="text-[#8A8A93] mb-1 font-medium">/ year</span>
+                            </div>
+                        </div>
+
+                        <motion.a
+                            href="https://apps.apple.com/us/app/lio/id6758862292"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="w-full py-4 rounded-full bg-gradient-to-r from-amber-200 to-amber-400 text-[#0A0A14] font-semibold text-lg shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transition-all text-center mb-6 relative z-10 flex items-center justify-center gap-2"
+                        >
+                            <Sparkles size={18} />
+                            {t('premium.cta')}
+                        </motion.a>
+
+                        <p className="text-xs text-[#8A8A93] text-center italic relative z-10 max-w-[200px]">
+                            {t('premium.price')}
+                        </p>
+                    </div>
+                </div>
+            </motion.div>
+        </section>
+    );
+};
+
+// --- Final CTA Section ---
+const FinalCTA = () => {
+    const { t } = useTranslation();
+    return (
+        <section className="relative z-10 py-32 px-6">
+            <div className="absolute inset-0 bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="max-w-4xl mx-auto glass-card p-16 flex flex-col items-center text-center relative overflow-hidden group"
+            >
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[150%] bg-indigo-500/10 blur-[100px] transition-all duration-700 group-hover:bg-purple-500/20" />
+                <h2 className="text-4xl md:text-6xl font-medium tracking-tight text-[#F5F3EE] mb-6 relative z-10">{t('home.ctaTitle')}</h2>
+                <p className="text-[#8A8A93] text-lg max-w-lg mb-10 relative z-10">{t('home.ctaDescription')}</p>
+                <motion.a
+                    href="https://apps.apple.com/us/app/lio/id6758862292"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="relative z-10 flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all"
+                >
+                    <Download size={20} />
+                    {t('home.downloadFree')}
+                </motion.a>
+                <p className="mt-4 text-xs text-white/50 italic relative z-10">{t('home.ctaNote')}</p>
+            </motion.div>
+        </section>
+    );
+};
 
 export default function Home() {
+    const { t } = useTranslation();
     return (
         <div className="bg-[#0A0A14] min-h-screen text-[#F5F3EE] font-sans selection:bg-purple-500/30">
             <CosmicCursor />
@@ -449,7 +563,7 @@ export default function Home() {
                         className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/20 bg-purple-500/10 text-xs font-semibold tracking-wide text-purple-200 uppercase mb-8 shadow-[inset_0_1px_rgba(255,255,255,0.1)]"
                     >
                         <Sparkles size={14} className="text-purple-300" />
-                        Potenciado por IA
+                        {t('home.poweredByAi')}
                     </motion.div>
 
                     <motion.h1
@@ -457,16 +571,15 @@ export default function Home() {
                         animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
                         transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
                         className="text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight font-medium leading-[1.1] text-[#F5F3EE] mb-6"
-                    >
-                        Tu paz mental <br className="hidden md:block" /> diaria.
-                    </motion.h1>
+                        dangerouslySetInnerHTML={{ __html: t('home.heroTitle') }}
+                    />
 
                     <h2 className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-200 to-indigo-300 italic font-light mb-8" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                        Un oasis privado.
+                        {t('home.heroSubtitle')}
                     </h2>
 
                     <p className="text-lg text-[#8A8A93] max-w-md font-light leading-relaxed mb-10">
-                        Transforma tu vida interior con afirmaciones diseñadas a medida, rutinas de consistencia y una estética serena en tu pantalla.
+                        {t('home.heroDescription')}
                     </p>
 
                     <div className="flex flex-col items-center lg:items-start">
@@ -479,9 +592,9 @@ export default function Home() {
                             className="flex items-center gap-3 bg-gradient-to-b from-white to-gray-200 text-black px-8 py-4 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all"
                         >
                             <Download size={20} />
-                            Descargar Lio Gratis
+                            {t('home.downloadFree')}
                         </motion.a>
-                        <p className="mt-4 text-xs text-[#8A8A93] italic drop-shadow-md">Empieza con 3 días de Premium gratis.</p>
+                        <p className="mt-4 text-xs text-[#8A8A93] italic drop-shadow-md">{t('home.premiumTrial')}</p>
                     </div>
                 </motion.div>
 
@@ -521,8 +634,8 @@ export default function Home() {
             {/* --- Features Section --- */}
             <section id="features" className="relative z-10 py-32 px-6 max-w-6xl mx-auto border-t border-white/5 bg-gradient-to-b from-[#0A0A14] to-black/20">
                 <div className="text-center mb-20 space-y-4 max-w-2xl mx-auto">
-                    <h2 className="text-4xl md:text-5xl font-medium tracking-tight">Artefactos de Paz.</h2>
-                    <p className="text-[#8A8A93] md:text-lg">Una suite de herramientas diseñadas con precisión para anclar tu mente en el presente.</p>
+                    <h2 className="text-4xl md:text-5xl font-medium tracking-tight">{t('home.featuresTitle')}</h2>
+                    <p className="text-[#8A8A93] md:text-lg">{t('home.featuresSubtitle')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -538,6 +651,7 @@ export default function Home() {
                 </div>
             </section>
 
+            <PremiumSection />
             <Testimonials />
             <FinalCTA />
 
@@ -548,19 +662,19 @@ export default function Home() {
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex items-center gap-3">
                         <img src="/lio-logoalone.png" alt="Lio" className="w-6 h-6 object-contain opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
-                        <span className="text-[#8A8A93] font-medium tracking-wide">Lio App</span>
+                        <span className="text-[#8A8A93] font-medium tracking-wide">{t('home.footerApp')}</span>
                     </div>
 
                     <div className="flex gap-10 text-sm font-medium text-[#8A8A93]">
                         {/* Link tags are fine, ensuring they point correctly to privacy and terms */}
-                        <Link to="/support" className="hover:text-white transition-colors">Soporte</Link>
-                        <Link to="/privacy" className="hover:text-white transition-colors">Privacidad</Link>
-                        <Link to="/terms" className="hover:text-white transition-colors">Términos</Link>
+                        <Link to="/support" className="hover:text-white transition-colors">{t('home.footerSupport')}</Link>
+                        <Link to="/privacy" className="hover:text-white transition-colors">{t('home.footerPrivacy')}</Link>
+                        <Link to="/terms" className="hover:text-white transition-colors">{t('home.footerTerms')}</Link>
                     </div>
 
                     <div className="flex items-center gap-3 text-xs text-[#5A5A6D]">
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <span>Sistemas Operativos. Lio 2026.</span>
+                        <span>{t('home.footerRights')}</span>
                     </div>
                 </div>
             </footer>

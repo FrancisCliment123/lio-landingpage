@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Pre-calculate random values for stars to avoid impure renders
 const stars = [...Array(40)].map(() => ({
@@ -14,6 +15,7 @@ const stars = [...Array(40)].map(() => ({
 }));
 
 export default function Privacy() {
+    const { t } = useTranslation();
     return (
         <div className="min-h-screen bg-[#050511] text-white font-sans overflow-hidden relative selection:bg-accent/30">
 
@@ -71,127 +73,127 @@ export default function Privacy() {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-4xl md:text-5xl font-bold text-center mb-4 text-white"
                     >
-                        Política de Privacidad de Lio
+                        {t('privacy.title')}
                     </motion.h1>
 
                     <p className="text-center text-gray-400 mb-12">
-                        <strong>Última actualización:</strong> 12 de febrero de 2026
+                        {t('privacy.lastUpdated')}
                     </p>
 
                     {/* Introduction */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Introducción</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.introTitle')}</h2>
                         <p className="text-gray-300 leading-relaxed">
-                            Esta Política de Privacidad describe cómo Lio ("nosotros", "nuestro" o "nos") recopila, usa y comparte información cuando utilizas nuestra aplicación móvil (la "App"). Estamos comprometidos a proteger tu privacidad y ser transparentes sobre nuestras prácticas de datos.
+                            {t('privacy.introText')}
                         </p>
                     </section>
 
                     {/* Information We Collect */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Información que Recopilamos</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.infoCollectTitle')}</h2>
 
-                        <h3 className="text-xl font-semibold mb-3 text-purple-300">1. Información que Proporcionas Directamente</h3>
-                        <p className="text-gray-300 mb-3">Cuando completas el proceso de onboarding, recopilamos:</p>
+                        <h3 className="text-xl font-semibold mb-3 text-purple-300">{t('privacy.infoDirectTitle')}</h3>
+                        <p className="text-gray-300 mb-3">{t('privacy.infoDirectIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li><strong>Información básica de perfil:</strong> Nombre y edad</li>
-                            <li><strong>Preferencias de afirmaciones:</strong> Categorías que seleccionas y tus afirmaciones preferidas</li>
-                            <li><strong>Preferencias de notificaciones:</strong> Si habilitas las notificaciones, frecuencia (notificaciones por día) y ventanas de tiempo preferidas</li>
-                            <li><strong>Uso de widgets:</strong> Si instalas el widget de iOS</li>
-                            <li><strong>Datos de suscripción premium:</strong> Información sobre tu prueba y estado de suscripción</li>
+                            <li>{t('privacy.infoDirectBasic')}</li>
+                            <li>{t('privacy.infoDirectPrefs')}</li>
+                            <li>{t('privacy.infoDirectNotifs')}</li>
+                            <li>{t('privacy.infoDirectWidget')}</li>
+                            <li>{t('privacy.infoDirectPremium')}</li>
                         </ul>
 
-                        <h3 className="text-xl font-semibold mb-3 mt-6 text-purple-300">2. Información Recopilada Automáticamente</h3>
+                        <h3 className="text-xl font-semibold mb-3 mt-6 text-purple-300">{t('privacy.infoAutoTitle')}</h3>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li><strong>Información del dispositivo:</strong> Plataforma (iOS), versión del sistema operativo y versión de la app</li>
-                            <li><strong>Análisis de uso:</strong> Cómo interactúas con la app, recopilado a través de análisis de PostHog</li>
-                            <li><strong>Datos de errores y rendimiento:</strong> Información técnica sobre fallos y errores de la app, recopilada a través de Sentry</li>
-                            <li><strong>Grabaciones de sesión:</strong> PostHog puede grabar sesiones de usuario para ayudarnos a mejorar la experiencia de la app</li>
-                            <li><strong>Información de compra:</strong> Datos de suscripción y pago procesados a través de RevenueCat y los sistemas de pago de Apple</li>
-                            <li><strong>Datos de seguimiento de conversión:</strong> Identificadores de dispositivo (IDFA en iOS cuando se otorga permiso) y eventos de la app recopilados a través de TikTok Pixel para medición publicitaria</li>
+                            <li>{t('privacy.infoAutoDevice')}</li>
+                            <li>{t('privacy.infoAutoAnalytics')}</li>
+                            <li>{t('privacy.infoAutoCrash')}</li>
+                            <li>{t('privacy.infoAutoSession')}</li>
+                            <li>{t('privacy.infoAutoPurchase')}</li>
+                            <li>{t('privacy.infoAutoAds')}</li>
                         </ul>
 
-                        <h3 className="text-xl font-semibold mb-3 mt-6 text-purple-300">3. Información Almacenada Localmente en tu Dispositivo</h3>
-                        <p className="text-gray-300 mb-3">Los siguientes datos se almacenan solo en tu dispositivo y no se transmiten a nuestros servidores:</p>
+                        <h3 className="text-xl font-semibold mb-3 mt-6 text-purple-300">{t('privacy.infoLocalTitle')}</h3>
+                        <p className="text-gray-300 mb-3">{t('privacy.infoLocalIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li>Datos de seguimiento de racha diaria (actualmente local; futuras actualizaciones pueden sincronizar con servidores backend)</li>
-                            <li>Tus afirmaciones favoritas</li>
-                            <li>Afirmaciones personalizadas que crees</li>
-                            <li>Preferencias detalladas de notificaciones</li>
-                            <li>Categorías de afirmación seleccionadas</li>
+                            <li>{t('privacy.infoLocalStreak')}</li>
+                            <li>{t('privacy.infoLocalFavs')}</li>
+                            <li>{t('privacy.infoLocalCustom')}</li>
+                            <li>{t('privacy.infoLocalNotifPrefs')}</li>
+                            <li>{t('privacy.infoLocalCategories')}</li>
                         </ul>
                     </section>
 
                     {/* How We Use Your Information */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Cómo Usamos tu Información</h2>
-                        <p className="text-gray-300 mb-3">Usamos la información recopilada para los siguientes propósitos:</p>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.howUseTitle')}</h2>
+                        <p className="text-gray-300 mb-3">{t('privacy.howUseIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li><strong>Prestación del servicio:</strong> Para proporcionarte afirmaciones y notificaciones personalizadas basadas en tus preferencias</li>
-                            <li><strong>Mejora de la app:</strong> Para analizar patrones de uso y mejorar la funcionalidad, diseño y experiencia de usuario de la app</li>
-                            <li><strong>Soporte al cliente:</strong> Para responder a tus comentarios y solicitudes de soporte</li>
-                            <li><strong>Gestión de suscripciones:</strong> Para procesar y gestionar tu suscripción premium</li>
-                            <li><strong>Monitoreo de errores:</strong> Para identificar y corregir problemas técnicos y errores</li>
-                            <li><strong>Comunicación:</strong> Para enviarte actualizaciones importantes sobre la app (si has optado por ello)</li>
+                            <li>{t('privacy.howUseService')}</li>
+                            <li>{t('privacy.howUseImprove')}</li>
+                            <li>{t('privacy.howUseSupport')}</li>
+                            <li>{t('privacy.howUseSubs')}</li>
+                            <li>{t('privacy.howUseErrors')}</li>
+                            <li>{t('privacy.howUseComms')}</li>
                         </ul>
                     </section>
 
                     {/* Third-Party Services */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Servicios de Terceros</h2>
-                        <p className="text-gray-300 mb-4">Utilizamos los siguientes servicios de terceros que pueden recopilar información:</p>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.thirdPartyTitle')}</h2>
+                        <p className="text-gray-300 mb-4">{t('privacy.thirdPartyIntro')}</p>
 
                         <div className="space-y-4">
                             <div className="glass-card p-4">
-                                <h3 className="text-lg font-semibold text-purple-300 mb-2">RevenueCat</h3>
+                                <h3 className="text-lg font-semibold text-purple-300 mb-2">{t('privacy.tpRevenueCatTitle')}</h3>
                                 <ul className="text-sm text-gray-300 space-y-1">
-                                    <li><strong>Propósito:</strong> Procesamiento de suscripciones y pagos</li>
-                                    <li><strong>Datos compartidos:</strong> Identificador de usuario, información de compra, estado de suscripción</li>
-                                    <li><strong>Política de privacidad:</strong> <a href="https://www.revenuecat.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://www.revenuecat.com/privacy</a></li>
+                                    <li>{t('privacy.tpRevenueCatPurpose')}</li>
+                                    <li>{t('privacy.tpRevenueCatData')}</li>
+                                    <li>{t('privacy.tpRevenueCatPrivacy')} <a href="https://www.revenuecat.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://www.revenuecat.com/privacy</a></li>
                                 </ul>
                             </div>
 
                             <div className="glass-card p-4">
-                                <h3 className="text-lg font-semibold text-purple-300 mb-2">Supabase</h3>
+                                <h3 className="text-lg font-semibold text-purple-300 mb-2">{t('privacy.tpSupabaseTitle')}</h3>
                                 <ul className="text-sm text-gray-300 space-y-1">
-                                    <li><strong>Propósito:</strong> Base de datos backend para almacenar respuestas de onboarding y comentarios (implementación futura)</li>
-                                    <li><strong>Datos compartidos:</strong> Toda la información de onboarding mencionada anteriormente, asociada con tu ID de usuario de RevenueCat</li>
-                                    <li><strong>Política de privacidad:</strong> <a href="https://supabase.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://supabase.com/privacy</a></li>
+                                    <li>{t('privacy.tpSupabasePurpose')}</li>
+                                    <li>{t('privacy.tpSupabaseData')}</li>
+                                    <li>{t('privacy.tpSupabasePrivacy')} <a href="https://supabase.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://supabase.com/privacy</a></li>
                                 </ul>
                             </div>
 
                             <div className="glass-card p-4">
-                                <h3 className="text-lg font-semibold text-purple-300 mb-2">Sentry</h3>
+                                <h3 className="text-lg font-semibold text-purple-300 mb-2">{t('privacy.tpSentryTitle')}</h3>
                                 <ul className="text-sm text-gray-300 space-y-1">
-                                    <li><strong>Propósito:</strong> Seguimiento de errores y monitoreo de rendimiento</li>
-                                    <li><strong>Datos compartidos:</strong> Registros de errores, información del dispositivo, dirección IP y contexto del usuario</li>
-                                    <li><strong>Política de privacidad:</strong> <a href="https://sentry.io/privacy/" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://sentry.io/privacy/</a></li>
+                                    <li>{t('privacy.tpSentryPurpose')}</li>
+                                    <li>{t('privacy.tpSentryData')}</li>
+                                    <li>{t('privacy.tpSentryPrivacy')} <a href="https://sentry.io/privacy/" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://sentry.io/privacy/</a></li>
                                 </ul>
                             </div>
 
                             <div className="glass-card p-4">
-                                <h3 className="text-lg font-semibold text-purple-300 mb-2">PostHog</h3>
+                                <h3 className="text-lg font-semibold text-purple-300 mb-2">{t('privacy.tpPostHogTitle')}</h3>
                                 <ul className="text-sm text-gray-300 space-y-1">
-                                    <li><strong>Propósito:</strong> Análisis de producto y grabación de sesiones</li>
-                                    <li><strong>Datos compartidos:</strong> Patrones de uso, interacciones del usuario, repeticiones de sesión, información del dispositivo</li>
-                                    <li><strong>Política de privacidad:</strong> <a href="https://posthog.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://posthog.com/privacy</a></li>
+                                    <li>{t('privacy.tpPostHogPurpose')}</li>
+                                    <li>{t('privacy.tpPostHogData')}</li>
+                                    <li>{t('privacy.tpPostHogPrivacy')} <a href="https://posthog.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://posthog.com/privacy</a></li>
                                 </ul>
                             </div>
 
                             <div className="glass-card p-4">
-                                <h3 className="text-lg font-semibold text-purple-300 mb-2">Apple App Store</h3>
+                                <h3 className="text-lg font-semibold text-purple-300 mb-2">{t('privacy.tpAppleTitle')}</h3>
                                 <ul className="text-sm text-gray-300 space-y-1">
-                                    <li><strong>Propósito:</strong> Procesamiento de pagos para suscripciones</li>
-                                    <li><strong>Datos compartidos:</strong> Información de pago, historial de compras (gestionado directamente por Apple)</li>
+                                    <li>{t('privacy.tpApplePurpose')}</li>
+                                    <li>{t('privacy.tpAppleData')}</li>
                                 </ul>
                             </div>
 
                             <div className="glass-card p-4">
-                                <h3 className="text-lg font-semibold text-purple-300 mb-2">TikTok Pixel</h3>
+                                <h3 className="text-lg font-semibold text-purple-300 mb-2">{t('privacy.tpTikTokTitle')}</h3>
                                 <ul className="text-sm text-gray-300 space-y-1">
-                                    <li><strong>Propósito:</strong> Seguimiento de conversión y medición publicitaria</li>
-                                    <li><strong>Datos compartidos:</strong> Identificadores de dispositivo (IDFA en iOS cuando se otorga permiso), eventos de la app (como instalaciones, compras y eventos personalizados)</li>
-                                    <li><strong>Política de privacidad:</strong> <a href="https://www.tiktok.com/legal/privacy-policy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://www.tiktok.com/legal/privacy-policy</a></li>
-                                    <li><strong>Exclusión:</strong> Puedes optar por no participar en el seguimiento de TikTok a través de la configuración de Transparencia de Seguimiento de Apps (ATT) de iOS denegando el permiso de seguimiento cuando se te solicite o yendo a Configuración &gt; Privacidad y Seguridad &gt; Seguimiento en tu dispositivo iOS</li>
+                                    <li>{t('privacy.tpTikTokPurpose')}</li>
+                                    <li>{t('privacy.tpTikTokData')}</li>
+                                    <li>{t('privacy.tpTikTokPrivacy')} <a href="https://www.tiktok.com/legal/privacy-policy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://www.tiktok.com/legal/privacy-policy</a></li>
+                                    <li>{t('privacy.tpTikTokOptOut')}</li>
                                 </ul>
                             </div>
                         </div>
@@ -199,147 +201,147 @@ export default function Privacy() {
 
                     {/* Data Retention */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Retención de Datos</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.retentionTitle')}</h2>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li><strong>Datos de cuenta:</strong> Conservamos tus datos de onboarding mientras uses la app. Puedes solicitar su eliminación en cualquier momento.</li>
-                            <li><strong>Datos de análisis:</strong> Los datos de análisis y seguimiento de errores se conservan según las políticas de nuestros proveedores externos (típicamente de 90 días a 2 años).</li>
-                            <li><strong>Datos locales:</strong> Los datos almacenados en tu dispositivo permanecen hasta que desinstalas la app o borras los datos de la app.</li>
+                            <li>{t('privacy.retentionAccount')}</li>
+                            <li>{t('privacy.retentionAnalytics')}</li>
+                            <li>{t('privacy.retentionLocal')}</li>
                         </ul>
                     </section>
 
                     {/* Data Security */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Seguridad de Datos</h2>
-                        <p className="text-gray-300 mb-3">Implementamos medidas técnicas y organizativas apropiadas para proteger tu información personal, incluyendo:</p>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.securityTitle')}</h2>
+                        <p className="text-gray-300 mb-3">{t('privacy.securityIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li>Conexiones cifradas (HTTPS/TLS) para toda la transmisión de datos</li>
-                            <li>Prácticas de almacenamiento seguro para datos en nuestros servidores</li>
-                            <li>Evaluaciones y actualizaciones de seguridad regulares</li>
-                            <li>Acceso limitado a datos personales solo por personal autorizado</li>
+                            <li>{t('privacy.securityTls')}</li>
+                            <li>{t('privacy.securityStorage')}</li>
+                            <li>{t('privacy.securityAudits')}</li>
+                            <li>{t('privacy.securityAccess')}</li>
                         </ul>
                         <p className="text-gray-300 mt-3">
-                            Sin embargo, ningún método de transmisión por internet o almacenamiento electrónico es 100% seguro, y no podemos garantizar seguridad absoluta.
+                            {t('privacy.securityWarning')}
                         </p>
                     </section>
 
                     {/* Your Privacy Rights */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Tus Derechos de Privacidad</h2>
-                        <p className="text-gray-300 mb-3">Dependiendo de tu ubicación, puedes tener los siguientes derechos:</p>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.rightsTitle')}</h2>
+                        <p className="text-gray-300 mb-3">{t('privacy.rightsIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li><strong>Acceso:</strong> Solicitar una copia de los datos personales que tenemos sobre ti</li>
-                            <li><strong>Corrección:</strong> Solicitar la corrección de datos inexactos o incompletos</li>
-                            <li><strong>Eliminación:</strong> Solicitar la eliminación de tus datos personales</li>
-                            <li><strong>Portabilidad:</strong> Solicitar tus datos en un formato portable</li>
-                            <li><strong>Exclusión:</strong> Optar por no participar en análisis y comunicaciones de marketing</li>
-                            <li><strong>Exclusión del seguimiento:</strong> Los usuarios de iOS pueden optar por no participar en el seguimiento de conversión de TikTok y otro seguimiento publicitario a través de la configuración de Transparencia de Seguimiento de Apps (ATT) (Configuración &gt; Privacidad y Seguridad &gt; Seguimiento)</li>
-                            <li><strong>Retirar consentimiento:</strong> Retirar el consentimiento para el procesamiento de datos cuando nos basamos en el consentimiento</li>
+                            <li>{t('privacy.rightsAccess')}</li>
+                            <li>{t('privacy.rightsCorrect')}</li>
+                            <li>{t('privacy.rightsDelete')}</li>
+                            <li>{t('privacy.rightsPortable')}</li>
+                            <li>{t('privacy.rightsOptOutAds')}</li>
+                            <li>{t('privacy.rightsOptOutTracking')}</li>
+                            <li>{t('privacy.rightsWithdrawConsent')}</li>
                         </ul>
                         <p className="text-gray-300 mt-3">
-                            Para ejercer estos derechos, contáctanos en la dirección de correo electrónico proporcionada a continuación.
+                            {t('privacy.rightsContact')}
                         </p>
                     </section>
 
                     {/* Children's Privacy */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Privacidad de Menores</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.childrenTitle')}</h2>
                         <p className="text-gray-300">
-                            La App no está destinada a niños menores de 13 años (o la edad aplicable de consentimiento digital en tu jurisdicción). No recopilamos conscientemente información personal de niños. Si crees que hemos recopilado información de un niño, contáctanos inmediatamente.
+                            {t('privacy.childrenText')}
                         </p>
                     </section>
 
                     {/* Push Notifications */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Notificaciones Push</h2>
-                        <p className="text-gray-300 mb-3">La app utiliza notificaciones push locales para entregar afirmaciones basadas en tus preferencias. Estas notificaciones son:</p>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.pushTitle')}</h2>
+                        <p className="text-gray-300 mb-3">{t('privacy.pushIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li>Programadas localmente en tu dispositivo</li>
-                            <li>Basadas en las categorías y preferencias que seleccionas</li>
-                            <li>Completamente opcionales y se pueden desactivar en cualquier momento a través de la configuración de la app o del dispositivo</li>
-                            <li>No se utilizan para enviar mensajes de marketing o publicidad</li>
+                            <li>{t('privacy.pushLocal')}</li>
+                            <li>{t('privacy.pushBased')}</li>
+                            <li>{t('privacy.pushOptional')}</li>
+                            <li>{t('privacy.pushNoAds')}</li>
                         </ul>
                     </section>
 
                     {/* Changes to This Privacy Policy */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Cambios a esta Política de Privacidad</h2>
-                        <p className="text-gray-300 mb-3">Podemos actualizar esta Política de Privacidad de vez en cuando. Te notificaremos de cualquier cambio material mediante:</p>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.changesTitle')}</h2>
+                        <p className="text-gray-300 mb-3">{t('privacy.changesIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li>Publicación de la nueva Política de Privacidad en la app</li>
-                            <li>Actualización de la fecha de "Última actualización"</li>
-                            <li>Envío de una notificación (si lo requiere la ley)</li>
+                            <li>{t('privacy.changesPost')}</li>
+                            <li>{t('privacy.changesDate')}</li>
+                            <li>{t('privacy.changesNotify')}</li>
                         </ul>
                         <p className="text-gray-300 mt-3">
-                            Tu uso continuado de la app después de que los cambios entren en vigencia constituye la aceptación de la política revisada.
+                            {t('privacy.changesAccept')}
                         </p>
                     </section>
 
                     {/* European Users (GDPR) */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Usuarios Europeos (GDPR)</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.gdprTitle')}</h2>
                         <p className="text-gray-300 mb-4">
-                            Como esta app es operada desde España y dirigida a usuarios en la Unión Europea y América Latina, cumplimos con el Reglamento General de Protección de Datos (GDPR).
+                            {t('privacy.gdprIntro')}
                         </p>
 
-                        <h3 className="text-xl font-semibold mb-3 text-purple-300">Tus Derechos GDPR</h3>
-                        <p className="text-gray-300 mb-3">Como residente de la UE, tienes los siguientes derechos:</p>
+                        <h3 className="text-xl font-semibold mb-3 text-purple-300">{t('privacy.gdprRightsTitle')}</h3>
+                        <p className="text-gray-300 mb-3">{t('privacy.gdprRightsIntro')}</p>
                         <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                            <li><strong>Derecho de acceso (Artículo 15):</strong> Obtener confirmación del procesamiento de datos y acceso a tus datos</li>
-                            <li><strong>Derecho de rectificación (Artículo 16):</strong> Corregir datos inexactos o incompletos</li>
-                            <li><strong>Derecho al olvido (Artículo 17):</strong> Solicitar la eliminación de tus datos ("derecho al olvido")</li>
-                            <li><strong>Derecho a la limitación (Artículo 18):</strong> Limitar cómo usamos tus datos</li>
-                            <li><strong>Derecho a la portabilidad de datos (Artículo 20):</strong> Recibir tus datos en un formato estructurado y legible por máquina</li>
-                            <li><strong>Derecho a oponerse (Artículo 21):</strong> Oponerse al procesamiento basado en intereses legítimos</li>
-                            <li><strong>Derecho a retirar el consentimiento:</strong> Retirar el consentimiento en cualquier momento sin afectar el procesamiento previo</li>
-                            <li><strong>Derecho a presentar una queja:</strong> Presentar una queja ante la AEPD (Agencia Española de Protección de Datos) en España o tu autoridad supervisora local</li>
+                            <li>{t('privacy.gdprAccess')}</li>
+                            <li>{t('privacy.gdprRectify')}</li>
+                            <li>{t('privacy.gdprForget')}</li>
+                            <li>{t('privacy.gdprRestrict')}</li>
+                            <li>{t('privacy.gdprPortable')}</li>
+                            <li>{t('privacy.gdprObject')}</li>
+                            <li>{t('privacy.gdprWithdraw')}</li>
+                            <li>{t('privacy.gdprComplain')}</li>
                         </ul>
 
-                        <h3 className="text-xl font-semibold mb-3 mt-6 text-purple-300">Autoridad de Protección de Datos</h3>
-                        <p className="text-gray-300 mb-3">Para usuarios en España, la autoridad supervisora es:</p>
+                        <h3 className="text-xl font-semibold mb-3 mt-6 text-purple-300">{t('privacy.gdprAuthorityTitle')}</h3>
+                        <p className="text-gray-300 mb-3">{t('privacy.gdprAuthorityIntro')}</p>
                         <div className="glass-card p-4 text-gray-300">
-                            <p className="font-semibold text-white mb-2">AEPD (Agencia Española de Protección de Datos)</p>
+                            <p className="font-semibold text-white mb-2">{t('privacy.gdprAepdTitle')}</p>
                             <ul className="text-sm space-y-1">
-                                <li><strong>Sitio web:</strong> <a href="https://www.aepd.es" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://www.aepd.es</a></li>
-                                <li><strong>Dirección:</strong> C/ Jorge Juan, 6, 28001 Madrid, España</li>
-                                <li><strong>Teléfono:</strong> +34 901 100 099</li>
+                                <li>{t('privacy.gdprAepdWeb')} <a href="https://www.aepd.es" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://www.aepd.es</a></li>
+                                <li>{t('privacy.gdprAepdAddress')}</li>
+                                <li>{t('privacy.gdprAepdPhone')}</li>
                             </ul>
                         </div>
                         <p className="text-gray-300 mt-3">
-                            Para usuarios en otros países de la UE o América Latina, contacta con tu autoridad local de protección de datos.
+                            {t('privacy.gdprAuthorityOutro')}
                         </p>
                     </section>
 
                     {/* Contact Us */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Contáctanos</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.contactTitle')}</h2>
                         <p className="text-gray-300 mb-4">
-                            Si tienes alguna pregunta, inquietud o solicitud relacionada con esta Política de Privacidad o nuestras prácticas de datos, incluido el ejercicio de tus derechos GDPR, contáctanos en:
+                            {t('privacy.contactIntro')}
                         </p>
                         <div className="glass-card p-6">
                             <ul className="space-y-2 text-gray-300">
-                                <li><strong>Correo electrónico:</strong> <a href="mailto:franciscoclimentb@gmail.com" className="text-accent hover:underline">franciscoclimentb@gmail.com</a></li>
-                                <li><strong>Desarrollador:</strong> Francisco Climent</li>
-                                <li><strong>App:</strong> Lio - Daily Affirmations</li>
-                                <li><strong>Ubicación:</strong> España</li>
+                                <li>{t('privacy.contactEmail')} <a href="mailto:franciscoclimentb@gmail.com" className="text-accent hover:underline">franciscoclimentb@gmail.com</a></li>
+                                <li>{t('privacy.contactDev')}</li>
+                                <li>{t('privacy.contactApp')}</li>
+                                <li>{t('privacy.contactLoc')}</li>
                             </ul>
                         </div>
                         <p className="text-gray-300 mt-4">
-                            Para solicitudes relacionadas con GDPR, indica claramente "Solicitud GDPR" en el asunto de tu correo y especifica qué derecho deseas ejercer. Responderemos dentro de un mes desde la recepción de tu solicitud, según lo requiere el GDPR.
+                            {t('privacy.contactDetails')}
                         </p>
                     </section>
 
                     {/* Cookie Policy */}
                     <section className="mb-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Política de Cookies</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('privacy.cookiesTitle')}</h2>
                         <p className="text-gray-300">
-                            La App no utiliza cookies. Sin embargo, nuestros proveedores de análisis externos (PostHog) pueden usar tecnologías similares con fines analíticos. Puedes controlarlas a través de la configuración de tu dispositivo.
+                            {t('privacy.cookiesText')}
                         </p>
                     </section>
 
                     {/* Footer Note */}
                     <div className="border-t border-white/20 pt-8 mt-12">
                         <p className="text-center text-gray-400 text-sm">
-                            <strong>Al usar la app Lio, reconoces que has leído y comprendido esta Política de Privacidad y aceptas la recopilación, uso y compartición de tu información según lo descrito aquí.</strong>
+                            <strong>{t('privacy.footerNote')}</strong>
                         </p>
                     </div>
 
