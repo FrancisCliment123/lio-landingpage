@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node -e \"require('fs').copyFileSync('tiktokXbO0kxKh207pOskDmKpicWLT7fFlFIoA.txt','dist/tiktokXbO0kxKh207pOskDmKpicWLT7fFlFIoA.txt')\"",
     "lint": "eslint .",
     "preview": "vite preview"
   },
